@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+  <h1 class="title">{{author.name}} Books</h1>
+  <div class="logo">
+    <div class="padding-bottom">
+      <a  href="{{url_for('newBooks', author_id= author.id)}}">
+        <button class="button" type="button"><i class="material-icons">&#xe147;</i> Add New Book</button>
+      </a>
+    </div>
+    <div class="padding-bottom">
+      <a href="{{url_for('deleteAuthor', author_id= author.id)}}">
+        <button class="button"><i class="material-icons">&#xe872;</i> Delete Author</button>
+      </a>
+    </div>
+    <div class="padding-bottom">
+      <a  href="{{url_for('editAuthor', author_id= author.id)}}">
+        <button class="button"><i class="material-icons">&#xe254;</i> Edit Author</button>
+      </a>
+    </div>
+  </div>
+  <div class="book_box">
+    {% for book in books %}
+    <div class="book_detail">
+      <div id="detail_box">
+        <h2>{{book.name}}</h2>
+        <p>{{book.description}}</p>
+        <h3>{{book.price}}</h3>
+      </div>
+      <div id="edit_box">
+        <a href="{{url_for('editBooks', author_id= author.id, book_id = book.id)}}">
+          <span>Edit</span>
+        </a> |
+        <a href="{{url_for('deleteBooks', author_id= author.id, book_id = book.id)}}">
+          <span>Delete</span>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

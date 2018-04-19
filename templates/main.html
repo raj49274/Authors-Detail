@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Books library</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+	</script>
+	<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+	<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+</head>
+<body>
+	<div id="container">
+		{% block content %}
+		{% endblock %}
+	</div>
+</body>
+</html>

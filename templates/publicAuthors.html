@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "publicheader.html" %}
+
+  <h1 class="title">Authors</h1>
+
+  {% for authors in author1 %}
+
+  <a href="{{url_for('showBooks', author_id = authors.id)}}">
+    <p id=author_name>{{authors.name}}</p>
+
+  </a>
+
+  {% endfor %}
+{% endblock %}

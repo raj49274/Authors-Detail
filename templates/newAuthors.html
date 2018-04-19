@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<h1 class="title">Add New Author</h1>
+	<div class="new_box">
+		<form action="#" method = "post">
+			<div class="form-group">
+				<label for="name">Name:</label>
+				<input type ="text" class="form-control" maxlength="100" name="name">
+				<div class="padding-bottom">
+					<button type="submit" class="button" id="submit" type="submit">Create</button>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

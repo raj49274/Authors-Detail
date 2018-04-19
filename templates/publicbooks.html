@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "publicheader.html" %}
+  <h1 class="title">{{author.name}} Books</h1>
+
+  <div class="book_box">
+    {% for book in books %}
+    <div class="book_detail">
+      <div id="detail_box">
+        <h2>{{book.name}}</h2>
+        <p>{{book.description}}</p>
+        <h3>{{book.price}}</h3>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

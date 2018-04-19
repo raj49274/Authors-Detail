@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<h1 class="title">Edit {{author.name}}</h1>
+  <div class="book_box">
+    <form action="{{ url_for('editAuthor',author_id = author.id)}}" method = "post">
+      <div class="row">
+				<div class="rowItem">
+					<label for="name">Name:</label>
+	        <input type ="text" class="form-control" name="name" value="{{author.name }}">
+				</div>
+        <div class="rowItem">
+					<button type="submit" class="button" id="submit" type="submit">
+	        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save</button>
+	        <a href = '{{url_for('showAuthors')}}'>
+	          <button class="button">Cancel</button>
+	        </a>
+				</div>
+
+      </div>
+    </form>
+  </div>
+{% endblock %}

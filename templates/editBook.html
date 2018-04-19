@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<h1 class="title">Edit Book</h1>
+  <div class="book_box">
+    <form action="#" method = "post">
+      <div id="row">
+        <div class="rowItem">
+          <label for="name">Name:</label>
+          <input type ="text" maxlength="100"  name="name" value="{{item.name}}">
+        </div>
+        <div class="rowItem">
+          <label for="description">Description:</label>
+          <textarea class="form-control" maxlength="250" rows="3" name="description">{{item.description}}</textarea>
+        </div>
+        <div class="rowItem">
+          <label for="price">Price:</label>
+          <input type ="text" maxlength="10" class="form-control" name="price" value="{{item.price}}">
+        </div>
+        <div class="rowItem">
+          <button type="submit" class="button" type="submit">Save</button>
+          <a href = '{{url_for('showAuthors')}}'>
+            <button class="button" type="button">Cancel</button>
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
