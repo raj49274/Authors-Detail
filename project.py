@@ -35,7 +35,8 @@ session = DBSession()
 @app.route('/login')
 def showLogin():
     state = ''.join(
-        random.choice(string.ascii_uppercase + string.digits)for x in range(32))
+        random.choice(string.ascii_uppercase + string.digits)
+        for x in range(32))
     login_session['state'] = state
     # return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
@@ -97,8 +98,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -129,7 +130,7 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' "style = "width: 300px; height: 300px ;border-radius: 150px"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -181,8 +182,8 @@ def showAuthors():
 @login_required
 def newAuthor():
     if request.method == 'POST':
-        newAuthor = Authors(name=request.form['name'],
-            user_id = login_session['user_id'])
+        newAuthor = Authors(
+            name=request.form['name'], user_id=login_session['user_id'])
         session.add(newAuthor)
         flash('New Profile %s Successfully Created' % newAuthor.name)
         session.commit()
@@ -198,12 +199,13 @@ def showBooks(author_id):
     author = session.query(Authors).filter_by(id=author_id).one()
     creator = getUserInfo(author.user_id)
     book = session.query(Books).filter_by(author_id=author_id).all()
-    if 'username' not in login_session or creator.id != login_session['user_id']:
-        return render_template('publicbooks.html', author=author, books=book,
-            creator=creator)
+    if 'username' not in login_session\
+            or creator.id != login_session['user_id']:
+        return render_template(
+            'publicbooks.html', author=author, books=book, creator=creator)
     else:
-        return render_template('books.html', author=author, books=book,
-            creator=creator)
+        return render_template(
+            'books.html', author=author, books=book, creator=creator)
 
 
 # creating new Books
@@ -212,9 +214,10 @@ def showBooks(author_id):
 def newBooks(author_id):
     author = session.query(Authors).filter_by(id=author_id).one()
     if request.method == 'POST':
-        newItem = Books(name=request.form['name'], price=request.form['price'],
+        newItem = Books(
+            name=request.form['name'], price=request.form['price'],
             description=request.form['description'], author_id=author_id,
-            user_id = login_session['user_id'])
+            user_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         flash('New Book %s Successfully Created' % (newItem.name))
@@ -228,6 +231,10 @@ def newBooks(author_id):
 @login_required
 def deleteAuthor(author_id):
     authorToDelete = session.query(Authors).filter_by(id=author_id).one()
+    creator = getUserInfo(authorToDelete.user_id)
+    if creator.id != login_session['user_id']:
+        flash('You are not authorised to delete this profile')
+        return redirect(url_for('showAuthors'))
     if request.method == 'POST':
         session.delete(authorToDelete)
         flash('%s Successfully Deleted' % authorToDelete.name)
@@ -242,6 +249,10 @@ def deleteAuthor(author_id):
 @login_required
 def editAuthor(author_id):
     editedAuthor = session.query(Authors).filter_by(id=author_id).one()
+    creator = getUserInfo(editedAuthor.user_id)
+    if creator.id != login_session['user_id']:
+        flash('You are not authorised to edit this profile')
+        return redirect(url_for('showAuthors'))
     if request.method == 'POST':
         if request.form['name']:
             editedAuthor.name = request.form['name']
@@ -252,11 +263,17 @@ def editAuthor(author_id):
 
 
 # Editing books
-@app.route('/authors/<int:author_id>/books/<int:book_id>/edit', methods=['GET', 'POST'])
+@app.route(
+    '/authors/<int:author_id>/books/<int:book_id>/edit',
+    methods=['GET', 'POST'])
 @login_required
 def editBooks(author_id, book_id):
     editbook = session.query(Books).filter_by(id=book_id).one()
     authorQuery = session.query(Authors).filter_by(id=author_id).one()
+    creator = getUserInfo(authorQuery.user_id)
+    if creator.id != login_session['user_id']:
+        flash('You are not authorised to edit this book')
+        return redirect(url_for('showAuthors'))
     if request.method == 'POST':
         if request.form['name']:
             editbook.name = request.form['name']
@@ -269,16 +286,23 @@ def editBooks(author_id, book_id):
         flash('Book Successfully Edited')
         return redirect(url_for('showBooks', author_id=author_id))
     else:
-        return render_template('editBook.html', author_id=author_id,
+        return render_template(
+            'editBook.html', author_id=author_id,
             book_id=book_id, item=editbook)
 
 
 # delete a book
-@app.route('/authors/<int:author_id>/books/<int:book_id>/delete', methods=['GET', 'POST'])
+@app.route(
+    '/authors/<int:author_id>/books/<int:book_id>/delete',
+    methods=['GET', 'POST'])
 @login_required
 def deleteBooks(author_id, book_id):
     authorQuery = session.query(Authors).filter_by(id=author_id).one()
     itemToDelete = session.query(Books).filter_by(id=book_id).one()
+    creator = getUserInfo(authorQuery.user_id)
+    if creator.id != login_session['user_id']:
+        flash('You are not authorised to delete this book')
+        return redirect(url_for('showAuthors'))
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
